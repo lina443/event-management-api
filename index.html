@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Management API — Ferris Wheel Venue</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a3d;
+      --accent: #c8a96e;
+      --accent2: #7c6fff;
+      --text: #e8e6f0;
+      --muted: #7a7890;
+      --get: #4ade80;
+      --post: #60a5fa;
+      --put: #f59e0b;
+      --patch: #a78bfa;
+      --delete: #f87171;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 80px 40px 60px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: -120px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(200,169,110,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(124,111,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.3);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      animation: fadeUp 0.6s 0.2s ease both;
+      margin-bottom: 40px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* CONTEXT BLOCK */
+    .context {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      margin: 40px 40px 0;
+      padding: 24px 28px;
+      border-radius: 0 4px 4px 0;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+
+    .context-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .context p {
+      font-size: 14px;
+      color: #b0adc0;
+      line-height: 1.7;
+    }
+
+    /* LAYOUT */
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    /* SECTION */
+    .section-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 48px 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* LIFECYCLE */
+    .lifecycle {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .lc-step {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .lc-step.draft { color: var(--muted); }
+    .lc-step.confirmed { color: var(--get); }
+    .lc-step.in-progress { color: var(--accent); }
+    .lc-step.completed { color: #34d399; }
+    .lc-step.cancelled { color: var(--delete); }
+
+    .lc-arrow {
+      color: var(--border);
+      font-size: 18px;
+      padding: 0 6px;
+    }
+
+    .lc-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ENDPOINT GROUPS */
+    .group {
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--surface);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .group-header:hover { background: var(--surface2); }
+
+    .group-icon {
+      font-size: 18px;
+      width: 32px;
+      text-align: center;
+    }
+
+    .group-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .group-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--surface2);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .group-chevron {
+      color: var(--muted);
+      transition: transform 0.3s;
+      font-size: 12px;
+    }
+
+    .group.open .group-chevron { transform: rotate(180deg); }
+
+    .group-desc {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 0 20px 14px 66px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .endpoints {
+      display: none;
+    }
+
+    .group.open .endpoints { display: block; }
+
+    /* ENDPOINT */
+    .endpoint {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      background: var(--bg);
+      transition: background 0.15s;
+    }
+
+    .endpoint:last-child { border-bottom: none; }
+    .endpoint:hover { background: #0e0e17; }
+
+    .endpoint-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .method {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 3px;
+      min-width: 52px;
+      text-align: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .method.GET    { background: rgba(74,222,128,0.1);  color: var(--get);   border: 1px solid rgba(74,222,128,0.2); }
+    .method.POST   { background: rgba(96,165,250,0.1);  color: var(--post);  border: 1px solid rgba(96,165,250,0.2); }
+    .method.PUT    { background: rgba(245,158,11,0.1);  color: var(--put);   border: 1px solid rgba(245,158,11,0.2); }
+    .method.PATCH  { background: rgba(167,139,250,0.1); color: var(--patch); border: 1px solid rgba(167,139,250,0.2); }
+    .method.DELETE { background: rgba(248,113,113,0.1); color: var(--delete);border: 1px solid rgba(248,113,113,0.2); }
+
+    .endpoint-path {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--text);
+      flex: 1;
+      word-break: break-all;
+    }
+
+    .endpoint-path .param { color: var(--accent2); }
+
+    .endpoint-summary {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+      padding-left: 64px;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .skill-card:hover {
+      border-color: rgba(200,169,110,0.4);
+      transform: translateY(-2px);
+    }
+
+    .skill-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .skill-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: gap;
+      gap: 16px;
+    }
+
+    .footer-author {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text);
+    }
+
+    .footer-role {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .footer-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.3);
+      padding: 6px 14px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .footer-badge:hover {
+      background: rgba(200,169,110,0.08);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .hero, .context, .main, .footer { padding-left: 20px; padding-right: 20px; }
+      .context { margin-left: 20px; margin-right: 20px; }
+      .hero-stats { gap: 20px; }
+      .endpoint-summary { padding-left: 0; margin-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Portfolio · Business Analyst · Docs-as-Code</div>
+  <h1>Event Management <em>API</em><br>Ferris Wheel Venue</h1>
+  <p class="hero-sub">
+    A real coordination system for managing up to 8 parallel VIP events per day —
+    weddings, birthdays, and tourist delegations.
+  </p>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">8</span>
+      <span class="stat-label">Parallel events / day</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5</span>
+      <span class="stat-label">Endpoint groups</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">12</span>
+      <span class="stat-label">API operations</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">v1.0</span>
+      <span class="stat-label">OpenAPI 3.0</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT -->
+<div class="context">
+  <div class="context-title">📌 Real Case Background</div>
+  <p>
+    Each event required end-to-end coordination: collecting client requirements (catering, decoration, equipment),
+    assigning photographers and videographers, briefing guest reception staff, and synchronizing
+    the Ferris wheel launch time with the engineering team — down to the minute.
+    This API formalizes that workflow into a structured, version-controlled contract.
+  </p>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LIFECYCLE -->
+  <div class="section-title">Event Lifecycle</div>
+  <div class="lifecycle">
+    <span class="lc-step draft">DRAFT</span>
+    <span class="lc-arrow">→</span>
+    <span class="lc-step confirmed">CONFIRMED</span>
+    <span class="lc-arrow">→</span>
+    <span class="lc-step in-progress">IN_PROGRESS</span>
+    <span class="lc-arrow">→</span>
+    <span class="lc-step completed">COMPLETED</span>
+  </div>
+  <div class="lc-note">CONFIRMED → CANCELLED (if client cancels)</div>
+
+  <!-- ENDPOINTS -->
+  <div class="section-title">API Endpoints</div>
+
+  <!-- Events -->
+  <div class="group open" onclick="toggle(this)">
+    <div class="group-header">
+      <span class="group-icon">🎪</span>
+      <span class="group-name">Events</span>
+      <span class="group-count">5 operations</span>
+      <span class="group-chevron">▼</span>
+    </div>
+    <div class="group-desc">Create and manage event bookings throughout their full lifecycle</div>
+    <div class="endpoints">
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method GET">GET</span>
+          <span class="endpoint-path">/events</span>
+        </div>
+        <div class="endpoint-summary">List all events for a given date — builds the coordinator's daily view</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method POST">POST</span>
+          <span class="endpoint-path">/events</span>
+        </div>
+        <div class="endpoint-summary">Register a new client booking (starts in DRAFT status)</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method GET">GET</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span></span>
+        </div>
+        <div class="endpoint-summary">Full details of a single event including services and staff</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method PATCH">PATCH</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span></span>
+        </div>
+        <div class="endpoint-summary">Partial update — adjust time, guest count, or notes</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method PATCH">PATCH</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span>/status</span>
+        </div>
+        <div class="endpoint-summary">Transition event status (confirm, start, complete, or cancel)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cabins -->
+  <div class="group" onclick="toggle(this)">
+    <div class="group-header">
+      <span class="group-icon">🎡</span>
+      <span class="group-name">Cabins</span>
+      <span class="group-count">2 operations</span>
+      <span class="group-chevron">▼</span>
+    </div>
+    <div class="group-desc">Check availability and assign VIP gondola cabins to time slots</div>
+    <div class="endpoints">
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method GET">GET</span>
+          <span class="endpoint-path">/cabins</span>
+        </div>
+        <div class="endpoint-summary">Find available cabins for a specific date, time, and duration</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method PUT">PUT</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span>/cabin</span>
+        </div>
+        <div class="endpoint-summary">Assign a cabin to an event — returns 409 if already booked</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services -->
+  <div class="group" onclick="toggle(this)">
+    <div class="group-header">
+      <span class="group-icon">🥂</span>
+      <span class="group-name">Services</span>
+      <span class="group-count">2 operations</span>
+      <span class="group-chevron">▼</span>
+    </div>
+    <div class="group-desc">Add catering, decoration, photography, video, and equipment to events</div>
+    <div class="endpoints">
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method GET">GET</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span>/services</span>
+        </div>
+        <div class="endpoint-summary">List all services ordered for this event</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method POST">POST</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span>/services</span>
+        </div>
+        <div class="endpoint-summary">Add a service: CATERING / DECORATION / PHOTO / VIDEO / EQUIPMENT</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staff -->
+  <div class="group" onclick="toggle(this)">
+    <div class="group-header">
+      <span class="group-icon">👥</span>
+      <span class="group-name">Staff</span>
+      <span class="group-count">2 operations</span>
+      <span class="group-chevron">▼</span>
+    </div>
+    <div class="group-desc">Assign guest managers, decorators, photographers, and engineers</div>
+    <div class="endpoints">
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method GET">GET</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span>/staff</span>
+        </div>
+        <div class="endpoint-summary">View all staff assignments for this event</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method POST">POST</span>
+          <span class="endpoint-path">/events/<span class="param">{eventId}</span>/staff</span>
+        </div>
+        <div class="endpoint-summary">Assign a staff member with role and briefing time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule -->
+  <div class="group" onclick="toggle(this)">
+    <div class="group-header">
+      <span class="group-icon">🕐</span>
+      <span class="group-name">Schedule</span>
+      <span class="group-count">2 operations</span>
+      <span class="group-chevron">▼</span>
+    </div>
+    <div class="group-desc">Minute-by-minute daily timeline and automatic conflict detection</div>
+    <div class="endpoints">
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method GET">GET</span>
+          <span class="endpoint-path">/schedule/<span class="param">{date}</span></span>
+        </div>
+        <div class="endpoint-summary">Full day timeline — decoration start, guest arrival, wheel launch, completion</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-top">
+          <span class="method GET">GET</span>
+          <span class="endpoint-path">/schedule/<span class="param">{date}</span>/conflicts</span>
+        </div>
+        <div class="endpoint-summary">Detect cabin overlaps, double-booked staff, or tight timing gaps</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section-title">Skills Demonstrated</div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-name">OpenAPI 3.0</div>
+      <div class="skill-desc">REST API design with schemas, examples, and error handling</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-name">Docs-as-Code</div>
+      <div class="skill-desc">Documentation versioned in Git alongside the codebase</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-name">Requirements Modeling</div>
+      <div class="skill-desc">Real operational process decomposed into API entities</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-name">Data Governance</div>
+      <div class="skill-desc">Status lifecycle, input validation, conflict detection</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-name">Cross-functional Coordination</div>
+      <div class="skill-desc">Multi-stakeholder workflows formalized as an API contract</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-name">Business Analysis</div>
+      <div class="skill-desc">Translated operational chaos into structured, traceable logic</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <div class="footer-author">Caroline</div>
+    <div class="footer-role">Business Analyst · Buenos Aires</div>
+  </div>
+  <a class="footer-badge" href="https://github.com/lina443/event-management-api" target="_blank">
+    View on GitHub →
+  </a>
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
