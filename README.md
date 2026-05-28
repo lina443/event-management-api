@@ -2,40 +2,28 @@
 
 > **Portfolio project** · Business Analyst · Docs-as-Code practice
 
-An OpenAPI specification for an event management system at a venue featuring VIP gondola cabins on a Ferris wheel. This project demonstrates the **Docs-as-Code** approach: documentation lives in the repository, is version-controlled, and can be deployed as interactive API docs.
+[**Live Documentation →**](https://lina443.github.io/event-management-api)
 
-## 📌 Background
 
-A real operational case: coordinating **8 parallel events in a single day** — weddings, birthday celebrations, and tourist delegations — at a Ferris wheel venue with VIP gondola cabins.
+## 📌 The Problem
 
-Each event required end-to-end synchronization of:
+A Ferris wheel venue hosted up to **8 simultaneous VIP events per day** — weddings, birthday celebrations, and tourist delegations. Coordination ran entirely through WhatsApp chats and handwritten notes.
 
-- Client requirements (catering, decoration, equipment)
-- Photographers and videographers
-- Guest reception and escort staff
-- Wheel launch timing with the engineering team
+The results were predictable:
 
-This specification describes an API that would automate that coordination and eliminate manual scheduling errors.
+- 2–3 cabin booking conflicts per day during peak season
+- Staff double-booked across simultaneous events with no system to catch it
+- No single source of truth — each coordinator maintained their own version of the schedule
+- One scheduling error caused a VIP wedding ceremony to start 40 minutes late
 
-## 📂 Repository Structure
+This API specification is a formalization of that operational reality: what the business actually needed, translated into a structured, version-controlled contract.
 
-```
-.
-├── docs/
-│   └── event-management-api.yaml   # OpenAPI 3.0 specification
-└── README.md
-```
-## 🔍 What the Specification Covers
 
-|Endpoint Group|Description                                                                    |
-|--------------|-------------------------------------------------------------------------------|
-|**Events**    |Create bookings, manage lifecycle (DRAFT → CONFIRMED → IN_PROGRESS → COMPLETED)|
-|**Cabins**    |Check cabin availability, assign cabins to specific time slots                 |
-|**Services**  |Add services: catering, decoration, photography, video, equipment              |
-|**Staff**     |Assign roles (guest manager, decorator, photographer, videographer, engineer)  |
-|**Schedule**  |Minute-by-minute daily timeline + automatic conflict detection                 |
+## 🎯 What This Project Does
 
-### Event Lifecycle
+An OpenAPI 3.0 specification covering the full event lifecycle — from initial client booking to post-event completion — with automatic conflict detection built in.
+
+**Event Lifecycle:**
 
 ```
 DRAFT → CONFIRMED → IN_PROGRESS → COMPLETED
@@ -43,29 +31,43 @@ DRAFT → CONFIRMED → IN_PROGRESS → COMPLETED
           CANCELLED
 ```
 
+## 🔍 Endpoint Groups
 
-## 🚀 How to View Interactive Docs
+|Group       |Operations|Description                                             |
+|------------|----------|--------------------------------------------------------|
+|**Events**  |5         |Create bookings, manage full lifecycle                  |
+|**Cabins**  |2         |Availability check, assignment with conflict guard (409)|
+|**Services**|2         |Add catering, decoration, photography, equipment        |
+|**Staff**   |2         |Assign roles with briefing time                         |
+|**Schedule**|2         |Minute-by-minute timeline + automatic conflict detection|
 
-1. Go to [editor.swagger.io](https://editor.swagger.io)
-1. Click **File → Import file**
-1. Select `docs/event-management-api.yaml`
-1. The interactive documentation will render on the right — all endpoints, schemas, and request/response examples included
 
+## 📂 Repository Structure
+
+```
+.
+├── docs/
+│   └── event-management-api.yaml   # OpenAPI 3.0 specification
+├── index.html                      # GitHub Pages live documentation
+└── README.md
+```
+
+## 🚀 View Interactive Docs
+1. Open [editor.swagger.io](https://editor.swagger.io)
+2. Click **File → Import file**
+3. Select `docs/event-management-api.yaml`
+
+Or visit the [live documentation page](https://lina443.github.io/event-management-api) directly.
 
 ## 🛠 Skills Demonstrated
-
 - **OpenAPI 3.0** — REST API design: endpoints, schemas, request/response examples, error handling
-- **Docs-as-Code** — documentation as code: Git versioning, structured repository layout
-- **Requirements & Modeling** — decomposing a real operational process into entities and operations
-- **Data Governance** — status lifecycle model, input validation, conflict detection
-- **Cross-functional Coordination** — translated multi-stakeholder workflows into a structured API contract
-
+- **Docs-as-Code** — documentation as code: Git versioning, structured repository layout, GitHub Pages deployment
+- **Requirements Modeling** — decomposing a real operational process into entities and operations
+- **Data Governance** — status lifecycle model, input validation, conflict detection logic
+- **Cross-functional Coordination** — multi-stakeholder workflows (clients, catering, photographers, engineers) formalized as an API contract
+- **Business Analysis** — identified root causes of operational failures and translated them into system requirements
 
 ## 👤 Author
-
-**Karolina Gergert** — Business Analyst  
-Background: client relationship management, requirements documentation (BPMN, User Story Map, OpenAPI)  
-📍 Buenos Aires, Argentina
-
-
-*This project was created as a Docs-as-Code practice to demonstrate business analysis and technical documentation skills.*
+**Karolina Gergert** — Business Analyst
+Background: client relationship management, requirements documentation (BPMN, User Story Map, OpenAPI)
+[linkedin.com/in/karolina-gergert-6176b2401](https://linkedin.com/in/karolina-gergert-6176b2401)
