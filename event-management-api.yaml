@@ -93,7 +93,7 @@ paths:
                 startTime: '16:00:00'
                 endTime: '17:30:00'
                 guestCount: 24
-                status: CONFIRMED
+                status: DRAFT
                 clientName: Anna Petrova
                 clientContact: anna@example.com
                 notes: Coordinate wheel launch with engineering team.
@@ -178,6 +178,8 @@ paths:
                   type: string
                   maxLength: 500
                   description: Required by business rule when cancelling, if applicable.
+            example:
+              status: CONFIRMED
       responses:
         '200':
           description: Status changed.
@@ -185,7 +187,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Event'
-              example: *id001
+              example:
+                eventId: evt-1042
+                title: VIP wedding ceremony
+                date: '2026-11-14'
+                startTime: '16:00:00'
+                endTime: '17:30:00'
+                guestCount: 24
+                status: CONFIRMED
+                clientName: Anna Petrova
+                clientContact: anna@example.com
+                notes: Coordinate wheel launch with engineering team.
+                cabin:
+                  cabinId: cabin-vip-02
+                  name: VIP Cabin 02
+                  capacity: 30
+                  isVip: true
+                services: []
+                staff: []
+                createdAt: '2026-10-18T10:00:00Z'
+                updatedAt: '2026-10-18T11:30:00Z'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -196,6 +217,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+              example:
+                code: INVALID_STATUS_TRANSITION
+                message: Event cannot move from COMPLETED to CONFIRMED.
         '422':
           $ref: '#/components/responses/ValidationError'
   /cabins:
@@ -261,6 +285,8 @@ paths:
                 cabinId:
                   type: string
                   minLength: 1
+            example:
+              cabinId: cabin-vip-02
       responses:
         '200':
           description: Cabin assigned.
@@ -269,6 +295,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Event'
               example: *id001
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '409':
@@ -320,6 +348,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventService'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -359,6 +389,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StaffAssignment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '409':
@@ -367,6 +399,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+              example:
+                code: STAFF_ALREADY_ASSIGNED
+                message: Staff member staff-018 has an overlapping assignment.
+                details:
+                - field: staffMemberId
+                  issue: Overlaps with event evt-1043.
         '422':
           $ref: '#/components/responses/ValidationError'
   /schedule/{date}:
@@ -655,6 +693,12 @@ components:
           format: date-time
         notes:
           type: string
+      example:
+        serviceId: srv-301
+        type: CATERING
+        description: Welcome drinks and canapés for 24 guests
+        scheduledAt: '2026-11-14T15:30:00'
+        notes: Confirm final guest count one day before event.
     CreateServiceRequest:
       type: object
       required:
@@ -705,6 +749,13 @@ components:
           format: date-time
         notes:
           type: string
+      example:
+        assignmentId: asg-77
+        staffMemberId: staff-018
+        staffName: Ivan Sokolov
+        role: ENGINEER
+        briefingTime: '2026-11-14T15:15:00'
+        notes: Confirm wheel launch window.
     CreateStaffAssignmentRequest:
       type: object
       required:
@@ -806,15 +857,27 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            code: BAD_REQUEST
+            message: Query parameter date is missing.
     NotFound:
       description: Requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            code: EVENT_NOT_FOUND
+            message: Event evt-9999 does not exist.
     ValidationError:
       description: Request data failed validation.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            code: VALIDATION_ERROR
+            message: Request data failed validation.
+            details:
+            - field: endTime
+              issue: Must be later than startTime.
