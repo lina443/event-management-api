@@ -1,0 +1,942 @@
+{
+  "info": {
+    "name": "Event Management API: Ferris Wheel Venue",
+    "description": "Requests for all 13 operations in event-management-api.yaml. Each request name starts with the user story ID from docs/traceability.md. Run Prism first (see docs/mock-server.md), then run the collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "US-01 List events for a date",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events?date=2026-11-14",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-11-14"
+                }
+              ]
+            },
+            "description": "Returns events for the date. User story US-01."
+          },
+          "response": []
+        },
+        {
+          "name": "US-02 Create event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events"
+              ]
+            },
+            "description": "Creates a booking in DRAFT status. User story US-02.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"VIP wedding ceremony\",\n  \"clientName\": \"Anna Petrova\",\n  \"clientContact\": \"anna@example.com\",\n  \"date\": \"2026-11-14\",\n  \"startTime\": \"16:00:00\",\n  \"endTime\": \"17:30:00\",\n  \"guestCount\": 24,\n  \"notes\": \"Coordinate wheel launch with engineering team.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US-02 Create event, end before start (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 422\", function () {",
+                  "    pm.response.to.have.status(422);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Prefer",
+                "value": "code=422",
+                "description": "Prism header: returns the documented response with this status code."
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events"
+              ]
+            },
+            "description": "Validation error. User story US-02.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"VIP wedding ceremony\",\n  \"clientName\": \"Anna Petrova\",\n  \"clientContact\": \"anna@example.com\",\n  \"date\": \"2026-11-14\",\n  \"startTime\": \"17:30:00\",\n  \"endTime\": \"16:00:00\",\n  \"guestCount\": 24,\n  \"notes\": \"Coordinate wheel launch with engineering team.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US-03 Get event details",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042"
+              ]
+            },
+            "description": "Returns event with cabin, services, and staff. User story US-03."
+          },
+          "response": []
+        },
+        {
+          "name": "US-03 Get unknown event (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Prefer",
+                "value": "code=404",
+                "description": "Prism header: returns the documented response with this status code."
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-9999"
+              ]
+            },
+            "description": "Event does not exist. User story US-03."
+          },
+          "response": []
+        },
+        {
+          "name": "US-04 Update event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042"
+              ]
+            },
+            "description": "Changes time, guest count, or notes. User story US-04.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startTime\": \"16:15:00\",\n  \"guestCount\": 26,\n  \"notes\": \"Two additional guests confirmed.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US-05 Confirm event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "status"
+              ]
+            },
+            "description": "Moves DRAFT to CONFIRMED. User story US-05.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US-05 Invalid status transition (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Prefer",
+                "value": "code=409",
+                "description": "Prism header: returns the documented response with this status code."
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "status"
+              ]
+            },
+            "description": "COMPLETED to CONFIRMED is not allowed. User story US-05.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cabins",
+      "item": [
+        {
+          "name": "US-06 Find available cabins",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cabins?date=2026-11-14&startTime=16:00:00&durationMinutes=90",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cabins"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-11-14"
+                },
+                {
+                  "key": "startTime",
+                  "value": "16:00:00"
+                },
+                {
+                  "key": "durationMinutes",
+                  "value": "90"
+                }
+              ]
+            },
+            "description": "Lists cabins free for the time slot. User story US-06."
+          },
+          "response": []
+        },
+        {
+          "name": "US-07 Assign cabin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/cabin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "cabin"
+              ]
+            },
+            "description": "Assigns a free cabin. User story US-07.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cabinId\": \"cabin-vip-02\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US-07 Assign cabin, overlap (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Prefer",
+                "value": "code=409",
+                "description": "Prism header: returns the documented response with this status code."
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/cabin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "cabin"
+              ]
+            },
+            "description": "Cabin is booked for an overlapping slot. User story US-07.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cabinId\": \"cabin-vip-02\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "US-08 List event services",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "services"
+              ]
+            },
+            "description": "Lists services of the event. User story US-08."
+          },
+          "response": []
+        },
+        {
+          "name": "US-09 Add service",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "services"
+              ]
+            },
+            "description": "Adds catering, decoration, photo, video, or equipment. User story US-09.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"CATERING\",\n  \"description\": \"Welcome drinks and canapés for 24 guests\",\n  \"scheduledAt\": \"2026-11-14T15:30:00\",\n  \"notes\": \"Confirm final guest count one day before event.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Staff",
+      "item": [
+        {
+          "name": "US-10 List event staff",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/staff",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "staff"
+              ]
+            },
+            "description": "Lists staff assigned to the event. User story US-10."
+          },
+          "response": []
+        },
+        {
+          "name": "US-11 Assign staff member",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/staff",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "staff"
+              ]
+            },
+            "description": "Assigns a staff member with a role. User story US-11.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"staffMemberId\": \"staff-018\",\n  \"role\": \"ENGINEER\",\n  \"briefingTime\": \"2026-11-14T15:15:00\",\n  \"notes\": \"Confirm wheel launch window.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US-11 Assign staff member, overlap (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Prefer",
+                "value": "code=409",
+                "description": "Prism header: returns the documented response with this status code."
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/evt-1042/staff",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "evt-1042",
+                "staff"
+              ]
+            },
+            "description": "Staff member has an overlapping assignment. User story US-11.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"staffMemberId\": \"staff-018\",\n  \"role\": \"ENGINEER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Schedule",
+      "item": [
+        {
+          "name": "US-12 Get daily schedule",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/2026-11-14",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "schedule",
+                "2026-11-14"
+              ]
+            },
+            "description": "Returns the day's timeline. User story US-12."
+          },
+          "response": []
+        },
+        {
+          "name": "US-13 Detect scheduling conflicts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/2026-11-14/conflicts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "schedule",
+                "2026-11-14",
+                "conflicts"
+              ]
+            },
+            "description": "Returns cabin, staff, and gap conflicts. User story US-13."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:4010/v1",
+      "type": "string"
+    }
+  ]
+}
