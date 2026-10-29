@@ -674,7 +674,7 @@
             "description": "Adds catering, decoration, photo, video, or equipment. User story US-09.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"type\": \"CATERING\",\n  \"description\": \"Welcome drinks and canapés for 24 guests\",\n  \"scheduledAt\": \"2026-11-14T15:30:00\",\n  \"notes\": \"Confirm final guest count one day before event.\"\n}",
+              "raw": "{\n  \"type\": \"CATERING\",\n  \"description\": \"Welcome drinks and canapés for 24 guests\",\n  \"scheduledAt\": \"2026-11-14T15:30:00+03:00\",\n  \"notes\": \"Confirm final guest count one day before event.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -774,7 +774,7 @@
             "description": "Assigns a staff member with a role. User story US-11.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"staffMemberId\": \"staff-018\",\n  \"role\": \"ENGINEER\",\n  \"briefingTime\": \"2026-11-14T15:15:00\",\n  \"notes\": \"Confirm wheel launch window.\"\n}",
+              "raw": "{\n  \"staffMemberId\": \"staff-018\",\n  \"role\": \"ENGINEER\",\n  \"briefingTime\": \"2026-11-14T15:15:00+03:00\",\n  \"notes\": \"Confirm wheel launch window.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
