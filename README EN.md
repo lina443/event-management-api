@@ -94,6 +94,14 @@ npx @stoplight/prism-cli mock event-management-api.yaml
 
 Prism starts on `http://127.0.0.1:4010`. The [mock server guide](docs/mock-server.md) explains how to trigger error responses and run the collection.
 
+## Testing the contract
+
+Newman runs the Postman collection against the Prism mock: 18 requests and 36 assertions. The first run found a contract defect. The examples for `scheduledAt` and `briefingTime` had no timezone offset, so Prism rejected them as invalid `date-time` values with `422`. I added the offset (`+03:00`) to the examples, and every assertion passes.
+
+![Newman run results](docs/newman-results.png)
+
+npx newman run postman/event-management-api.postman_collection.json --env-var "baseUrl=http://127.0.0.1:4010"
+
 ## Repository structure
 
 ```
