@@ -487,8 +487,8 @@ paths:
                   - evt-1042
                   - evt-1043
                   resourceId: cabin-vip-02
-                  startDateTime: '2026-11-14T16:00:00'
-                  endDateTime: '2026-11-14T16:30:00'
+                  startDateTime: '2026-11-14T16:00:00+03:00'
+                  endDateTime: '2026-11-14T16:30:00+03:00'
         '400':
           $ref: '#/components/responses/BadRequest'
 components:
@@ -697,7 +697,7 @@ components:
         serviceId: srv-301
         type: CATERING
         description: Welcome drinks and canapés for 24 guests
-        scheduledAt: '2026-11-14T15:30:00'
+        scheduledAt: '2026-11-14T15:30:00+03:00'
         notes: Confirm final guest count one day before event.
     CreateServiceRequest:
       type: object
@@ -718,7 +718,7 @@ components:
       example:
         type: CATERING
         description: Welcome drinks and canapés for 24 guests
-        scheduledAt: '2026-11-14T15:30:00'
+        scheduledAt: '2026-11-14T15:30:00+03:00'
         notes: Confirm final guest count one day before event.
     StaffRole:
       type: string
@@ -754,7 +754,7 @@ components:
         staffMemberId: staff-018
         staffName: Ivan Sokolov
         role: ENGINEER
-        briefingTime: '2026-11-14T15:15:00'
+        briefingTime: '2026-11-14T15:15:00+03:00'
         notes: Confirm wheel launch window.
     CreateStaffAssignmentRequest:
       type: object
@@ -775,7 +775,7 @@ components:
       example:
         staffMemberId: staff-018
         role: ENGINEER
-        briefingTime: '2026-11-14T15:15:00'
+        briefingTime: '2026-11-14T15:15:00+03:00'
         notes: Confirm wheel launch window.
     ScheduleItem:
       type: object
