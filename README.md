@@ -76,7 +76,7 @@ Every error response uses one `Error` schema with a machine-readable `code`, a h
 
 ## Requirements traceability
 
-The [traceability matrix](docs/traceability.md) links 13 user stories to the 13 operations, their response codes, and acceptance criteria. An excerpt:
+The [traceability matrix](traceability.md) links 13 user stories to the 13 operations, their response codes, and acceptance criteria. An excerpt:
 
 | User story | Endpoint | Code | Acceptance criterion |
 |---|---|---|---|
