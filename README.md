@@ -86,19 +86,19 @@ The [traceability matrix](docs/traceability.md) links 13 user stories to the 13 
 
 ## Mock server and Postman collection
 
-The repository has no backend. [Prism](https://github.com/stoplightio/prism) reads the specification and answers requests with its examples. The [Postman collection](postman/event-management-api.postman_collection.json) holds 18 requests, one for each operation plus five error cases, and each request carries tests for the status code.
+The repository has no backend. [Prism](https://github.com/stoplightio/prism) reads the specification and answers requests with its examples. The [Postman collection](event-management-api.postman_collection.json) holds 18 requests, one for each operation plus five error cases, and each request carries tests for the status code.
 
 ```bash
 npx @stoplight/prism-cli mock event-management-api.yaml
 ```
 
-Prism starts on `http://127.0.0.1:4010`. The [mock server guide](docs/mock-server.md) explains how to trigger error responses and run the collection.
+Prism starts on `http://127.0.0.1:4010`. The [mock server guide](mock-server.md) explains how to trigger error responses and run the collection.
 
 ## Testing the contract
 
 Newman runs the Postman collection against the Prism mock: 18 requests and 36 assertions. The first run found a contract defect. The examples for `scheduledAt` and `briefingTime` had no timezone offset, so Prism rejected them as invalid `date-time` values with `422`. I added the offset (`+03:00`) to the examples, and every assertion passes.
 
-![Newman run results](docs/newman-results.png)
+![Newman run results](newman-results.png)
 
 npx newman run postman/event-management-api.postman_collection.json --env-var "baseUrl=http://127.0.0.1:4010"
 
@@ -116,10 +116,10 @@ postman/event-management-api.postman_collection.json   Postman collection
 
 - [Interactive documentation (Redoc)](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/lina443/event-management-api/main/event-management-api.yaml)
 - [OpenAPI source file](event-management-api.yaml)
-- [Requirements traceability matrix](docs/traceability.md)
-- [Diagrams](docs/diagrams.md)
-- [Mock server guide](docs/mock-server.md)
-- [Postman collection](postman/event-management-api.postman_collection.json)
+- [Requirements traceability matrix](traceability.md)
+- [Diagrams](diagrams.md)
+- [Mock server guide](mock-server.md)
+- [Postman collection](event-management-api.postman_collection.json)
 
 ## Status and assumptions
 
