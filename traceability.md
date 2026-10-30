@@ -1,6 +1,6 @@
 # Requirements Traceability Matrix
 
-This matrix links each user story to the API operation that implements it, the response codes it returns, and the acceptance criteria that confirm it. It covers all 13 operations in [`event-management-api.yaml`](../event-management-api.yaml).
+This matrix links each user story to the API operation that implements it, the response codes it returns, and the acceptance criteria that confirm it. It covers all 13 operations in [`event-management-api.yaml`](event-management-api.yaml).
 
 Roles: **Venue manager** books and manages events. **Coordinator** assigns cabins, services, and staff. **Operations lead** runs the day schedule.
 

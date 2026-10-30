@@ -96,22 +96,23 @@ Prism starts on `http://127.0.0.1:4010`. The [mock server guide](mock-server.md)
 
 ## Testing the contract
 
-Newman runs the Postman collection against the Prism mock: 18 requests and 36 assertions. The first run found a contract defect. The examples for `scheduledAt` and `briefingTime` had no timezone offset, so Prism rejected them as invalid `date-time` values with `422`. I added the offset (`+03:00`) to the examples, and every assertion passes.
+Newman runs the Postman collection against the Prism mock: 18 requests and 36 assertions. The first run found a contract defect. The examples for `scheduledAt` and `briefingTime` had no timezone offset, so Prism rejected them as invalid `date-time` values with `422`. I added the offset (`+03:00`) to the examples and ran the collection again.
 
-![Newman run results](newman-results.png)
-
-``bash
+```bash
 npx newman run event-management-api.postman_collection.json --env-var "baseUrl=http://127.0.0.1:4010"
 ```
+
+![Newman run results](newman-results.png)
 
 ## Repository structure
 
 ```
-event-management-api.yaml                         OpenAPI 3.0 specification
+event-management-api.yaml                    OpenAPI 3.0 specification
 traceability.md                              User stories, endpoints, acceptance criteria
 diagrams.md                                  Sequence and state diagrams
-mock-server.md                               Prism and Postman guide
-event-management-api.postman_collection.json   Postman collection
+mock-server.md                               Prism, Postman, and Newman guide
+event-management-api.postman_collection.json Postman collection
+newman-results.png                           Newman test run
 ```
 
 ## Documentation
