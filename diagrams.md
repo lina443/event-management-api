@@ -1,6 +1,6 @@
 # Diagrams
 
-Two diagrams describe the core behavior of the [Event Management API](../event-management-api.yaml). GitHub renders them in the browser.
+Two diagrams describe the core behavior of the [Event Management API](event-management-api.yaml). GitHub renders them in the browser.
 
 ## 1. Cabin assignment with a conflict
 
