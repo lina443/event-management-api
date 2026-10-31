@@ -40,7 +40,7 @@ The response is `409 CABIN_ALREADY_BOOKED` with the example from the specificati
 2. Check the collection variable `baseUrl`. The default is `http://127.0.0.1:4010`.
 3. Start Prism, then run the collection with the Collection Runner.
 
-The collection holds 18 requests in five folders: Events, Cabins, Services, Staff, and Schedule. Each request name starts with a user story ID from the [traceability matrix](traceability.md). Five requests send a `Prefer` header to show error responses (404, 409, 422). Every request has two tests: the expected status code and a JSON body.
+The collection holds 18 requests in five folders: Events, Cabins, Services, Staff, and Schedule. Each request name starts with a user story ID from the [traceability matrix](traceability.md). Five requests send a `Prefer` header to show error responses (404, 409, 422). Every request has two test checks: the expected status code and a response check for key contract fields or the documented error code.
 
 ## Run the collection with Newman
 

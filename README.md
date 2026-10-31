@@ -4,7 +4,7 @@ A business analysis portfolio project. This repository holds an OpenAPI 3.0 spec
 
 ## Problem
 
-A venue manager books a VIP cabin, orders catering and decoration, assigns staff, and schedules the wheel launch. Each step lives in a separate spreadsheet or chat, so double bookings of cabins and staff go unnoticed until the event day. The API gives one contract for the whole booking lifecycle and detects conflicts before they reach the guests.
+A venue manager books a VIP cabin, orders catering and decoration, assigns staff, and schedules the wheel launch. Each step lives in a separate spreadsheet or chat, so double bookings of cabins and staff go unnoticed until the event day. The API contract describes one consistent booking lifecycle and the expected responses when cabin or staff scheduling conflicts are identified.
 
 ## Scope
 
@@ -65,10 +65,10 @@ sequenceDiagram
 
 ## Business rules in the contract
 
-- The API validates that the start time is earlier than the end time and that the guest count is positive (`422`).
-- The API rejects a cabin assignment that overlaps another booking (`409 CABIN_ALREADY_BOOKED`).
-- The API rejects a staff assignment that overlaps another assignment (`409 STAFF_ALREADY_ASSIGNED`).
-- The conflict check reports cabin overlaps, staff double bookings, and insufficient gaps between activities.
+- The contract specifies validation that the start time is earlier than the end time and that the guest count is positive (`422`).
+- The contract defines a conflict response for a cabin assignment that overlaps another booking (`409 CABIN_ALREADY_BOOKED`).
+- The contract defines a conflict response for a staff assignment that overlaps another assignment (`409 STAFF_ALREADY_ASSIGNED`).
+- The conflict-check response is designed to report cabin overlaps, staff double bookings, and insufficient gaps between activities.
 
 ## Error handling
 
@@ -86,7 +86,7 @@ The [traceability matrix](traceability.md) links 13 user stories to the 13 opera
 
 ## Mock server and Postman collection
 
-The repository has no backend. [Prism](https://github.com/stoplightio/prism) reads the specification and answers requests with its examples. The [Postman collection](event-management-api.postman_collection.json) holds 18 requests, one for each operation plus five error cases, and each request carries tests for the status code.
+The repository has no backend. [Prism](https://github.com/stoplightio/prism) reads the specification and answers requests with its examples. The [Postman collection](event-management-api.postman_collection.json) holds 18 requests, one for each operation plus five error cases, and each request checks the status code plus response structure or the documented error code.
 
 ```bash
 npx @stoplight/prism-cli mock event-management-api.yaml
@@ -96,13 +96,15 @@ Prism starts on `http://127.0.0.1:4010`. The [mock server guide](mock-server.md)
 
 ## Testing the contract
 
-Newman runs the Postman collection against the Prism mock: 18 requests and 36 assertions. The first run found a contract defect. The examples for `scheduledAt` and `briefingTime` had no timezone offset, so Prism rejected them as invalid `date-time` values with `422`. I added the offset (`+03:00`) to the examples and ran the collection again.
+Newman runs the Postman collection against the Prism mock: 18 requests and 36 test checks (status plus a contract-specific response check). The first run found a contract defect. The examples for `scheduledAt` and `briefingTime` had no timezone offset, so Prism rejected them as invalid `date-time` values with `422`. I added the offset (`+03:00`) to the examples and ran the collection again.
 
 ```bash
 npx newman run event-management-api.postman_collection.json --env-var "baseUrl=http://127.0.0.1:4010"
 ```
 
-![Newman run results](newman-results.png)
+The screenshot below records the earlier baseline run; after the response-content checks were strengthened, rerun the command above and replace the screenshot with the fresh result.
+
+![Previous Newman baseline run](newman-results.png)
 
 ## Repository structure
 

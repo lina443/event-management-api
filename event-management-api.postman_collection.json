@@ -19,8 +19,11 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"items\").that.is.an(\"array\");",
+                  "    pm.expect(body).to.have.property(\"total\").that.is.a(\"number\");",
                   "});"
                 ]
               }
@@ -64,8 +67,12 @@
                   "pm.test(\"Status is 201\", function () {",
                   "    pm.response.to.have.status(201);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"eventId\").that.is.a(\"string\");",
+                  "    pm.expect(body.status).to.eql(\"DRAFT\");",
+                  "    pm.expect(body.cabin).to.be.undefined;",
                   "});"
                 ]
               }
@@ -116,8 +123,10 @@
                   "pm.test(\"Status is 422\", function () {",
                   "    pm.response.to.have.status(422);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response error matches documented code\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.eql(\"VALIDATION_ERROR\");",
                   "});"
                 ]
               }
@@ -173,8 +182,12 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"eventId\");",
+                  "    pm.expect(body).to.have.property(\"services\").that.is.an(\"array\");",
+                  "    pm.expect(body).to.have.property(\"staff\").that.is.an(\"array\");",
                   "});"
                 ]
               }
@@ -213,8 +226,10 @@
                   "pm.test(\"Status is 404\", function () {",
                   "    pm.response.to.have.status(404);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response error matches documented code\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.eql(\"EVENT_NOT_FOUND\");",
                   "});"
                 ]
               }
@@ -258,8 +273,11 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"eventId\");",
+                  "    pm.expect(body).to.have.property(\"updatedAt\");",
                   "});"
                 ]
               }
@@ -311,8 +329,10 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.status).to.eql(\"CONFIRMED\");",
                   "});"
                 ]
               }
@@ -365,8 +385,10 @@
                   "pm.test(\"Status is 409\", function () {",
                   "    pm.response.to.have.status(409);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response error matches documented code\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.eql(\"INVALID_STATUS_TRANSITION\");",
                   "});"
                 ]
               }
@@ -429,8 +451,10 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"items\").that.is.an(\"array\");",
                   "});"
                 ]
               }
@@ -482,8 +506,11 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"cabin\").that.is.an(\"object\");",
+                  "    pm.expect(body.cabin).to.have.property(\"cabinId\");",
                   "});"
                 ]
               }
@@ -536,8 +563,10 @@
                   "pm.test(\"Status is 409\", function () {",
                   "    pm.response.to.have.status(409);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response error matches documented code\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.eql(\"CABIN_ALREADY_BOOKED\");",
                   "});"
                 ]
               }
@@ -600,8 +629,10 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an(\"array\");",
                   "});"
                 ]
               }
@@ -641,8 +672,10 @@
                   "pm.test(\"Status is 201\", function () {",
                   "    pm.response.to.have.status(201);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"serviceId\");",
                   "});"
                 ]
               }
@@ -700,8 +733,10 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an(\"array\");",
                   "});"
                 ]
               }
@@ -741,8 +776,10 @@
                   "pm.test(\"Status is 201\", function () {",
                   "    pm.response.to.have.status(201);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"assignmentId\");",
                   "});"
                 ]
               }
@@ -795,8 +832,10 @@
                   "pm.test(\"Status is 409\", function () {",
                   "    pm.response.to.have.status(409);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response error matches documented code\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.eql(\"STAFF_ALREADY_ASSIGNED\");",
                   "});"
                 ]
               }
@@ -859,8 +898,10 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"items\").that.is.an(\"array\");",
                   "});"
                 ]
               }
@@ -899,8 +940,11 @@
                   "pm.test(\"Status is 200\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
-                  "pm.test(\"Response is JSON\", function () {",
+                  "pm.test(\"Response contains key contract fields\", function () {",
                   "    pm.response.to.be.json;",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property(\"hasConflicts\").that.is.a(\"boolean\");",
+                  "    pm.expect(body).to.have.property(\"items\").that.is.an(\"array\");",
                   "});"
                 ]
               }

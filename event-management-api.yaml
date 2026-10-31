@@ -86,7 +86,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Event'
-              example: &id001
+              example:
                 eventId: evt-1042
                 title: VIP wedding ceremony
                 date: '2026-11-14'
@@ -97,11 +97,6 @@ paths:
                 clientName: Anna Petrova
                 clientContact: anna@example.com
                 notes: Coordinate wheel launch with engineering team.
-                cabin:
-                  cabinId: cabin-vip-02
-                  name: VIP Cabin 02
-                  capacity: 30
-                  isVip: true
                 services: []
                 staff: []
                 createdAt: '2026-10-18T10:00:00Z'
@@ -125,7 +120,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Event'
-              example: *id001
+              example: &id005
+                eventId: evt-1042
+                title: VIP wedding ceremony
+                date: '2026-11-14'
+                startTime: '16:00:00'
+                endTime: '17:30:00'
+                guestCount: 24
+                status: CONFIRMED
+                clientName: Anna Petrova
+                clientContact: anna@example.com
+                notes: Coordinate wheel launch with engineering team.
+                cabin:
+                  cabinId: cabin-vip-02
+                  name: VIP Cabin 02
+                  capacity: 30
+                  isVip: true
+                services: []
+                staff: []
+                createdAt: '2026-10-18T10:00:00Z'
+                updatedAt: '2026-10-18T11:30:00Z'
+
         '404':
           $ref: '#/components/responses/NotFound'
     patch:
@@ -146,7 +161,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Event'
-              example: *id001
+              example: *id005
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -294,7 +309,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Event'
-              example: *id001
+              example: *id005
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -574,7 +589,7 @@ components:
           updatedAt:
             type: string
             format: date-time
-      example: *id001
+      example: *id005
     CreateEventRequest:
       type: object
       required:
@@ -623,6 +638,7 @@ components:
     UpdateEventRequest:
       type: object
       minProperties: 1
+      description: At least one editable field must be supplied. An empty object fails request-schema validation (422).
       properties:
         title:
           type: string
